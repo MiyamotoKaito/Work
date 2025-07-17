@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] float _moveSpeed;
-    [SerializeField] float _jumpForce;
     Rigidbody2D _rb;
 
     void Start()
@@ -13,11 +12,19 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()
     {
-        _moveSpeed = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.W))
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+
+        Vector2 direction = new Vector2(x, y).normalized;
+        _rb.linearVelocity = direction * _moveSpeed;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerField"))
         {
-            Debug.Log("WÇ™âüÇ≥ÇÍÇΩ");
-            _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Force);
+            Debug.Log("âÊñ äOÇ…èoÇΩ!!");
+            transform.position = Vector2.zero;        
         }
     }
 }
